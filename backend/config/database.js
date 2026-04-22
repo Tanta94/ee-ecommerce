@@ -2,18 +2,18 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 const pool = new Pool({
-  host: 'aws-0-eu-west-1.pooler.supabase.com',
-  port: 6543,
-  database: 'postgres',
-  user: 'postgres.qlfciwgpahgbsjrbzddj',
-  password: process.env.DB_PASSWORD,
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
-  max: 10,
 });
 
 pool.connect()
-  .then(client => { console.log('✅ Supabase connected'); client.release(); })
-  .catch(err => { console.error('❌ Database connection failed:', err.message); });
+  .then(client => {
+    console.log('✅ Supabase connected');
+    client.release();
+  })
+  .catch(err => {
+    console.error('❌ Database connection failed:', err.message);
+  });
 
 const db = {
   execute: async (sql, params = []) => {
